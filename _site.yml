@@ -1,0 +1,14 @@
+name: "Factors Influencing Drug Prices FlexDashboard"
+output_dir: "."
+navbar:
+  title: "Factors Influencing Drug Prices"
+  right:
+    - text: "Dashboard"
+      href: dashboard_pharma.html
+    - text: "Project Website"
+      href: https://josiealford14.github.io/p8105_final_jmmm/
+    - icon: fa-github fa-lg
+      href: https://github.com/josiealford14/dashboard_pharma
+output:
+  html_document:
+    theme: cosmo

@@ -1,0 +1,8 @@
+---
+title: "Factors Influencing Drug Prices FlexDashboard"
+---
+## Flexdashboard
+This is our interactive [flexdashboard](dashboard_pharma.html) with plotly. The GitHub repo and associated code for this homework can be found [here](https://github.com/josiealford14/dashboard_pharma).
+
+## Final Project
+Click [here](https://josiealford14.github.io/p8105_final_jmmm/) to navigate to our Final Project website.
