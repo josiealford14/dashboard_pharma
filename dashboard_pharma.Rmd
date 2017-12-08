@@ -25,7 +25,7 @@ library(viridis)
 ```
 
 ```{r}
-final_dataset = read_csv("../data/final_dataset_20171205.csv")
+final_dataset = read_csv("../p8105_final_jmmm/data/final_dataset_20171205.csv")
 drugs_interest = c("Lyrica", "Eliquis", "Xeljanz", "Cialis", "Invokana", "Breo", "Latuda", "Victoza", "Viagra", "Humira", "Harvoni", "Enbrel", "Lantus Solostar", "Remicade", "Januvia", "Advair Diskus", "Crestor", "Neulasta", "Copaxone", "Rituxan", "Tecfidera", "Xarelto", "Lantus", "Eliquis", "Truvada", "Vyvanse", "Avastin", "Symbicort", "Vicodin", "OxyContin", "Ritalin", "Concerta", "Focalin", "Metadate", "Ambien", "Lunesta", "Valium","Duragesic", "Opana", "Darvon", "Dilaudid", "Demerol", "Lomotil", "Nembutal", "Dexedrine", "Adderall", "Percocet", "Suboxone", "Fentanyl", "Lipitor", "Xanax", "Celebrex", "Prozac", "Crestor", "Nexium", "Lisinopril", "Zoloft", "Abilify", "Prilosec", "Percocet","Zocor")
 ```
 
@@ -48,10 +48,34 @@ Column {data-width=500}
 ### Violin Plot of Zoloft: look at the change in distribution of prices over time
 
 ```{r}
+drug_price =
+  read_csv("../data/drug_price.csv") %>%
+  clean_names()
+
+drug_price = 
+  drug_price %>%
+  rename(trade_name = ndc_description,
+         drug_type = classification_for_rate_setting,
+         unit_price = nadac_per_unit) %>%
+  mutate(trade_name = str_replace(trade_name, "[0-9]", "_"),
+         trade_name = str_to_title(trade_name),
+         otc = recode(otc, "Y" = "yes", "N" = "no"),
+         otc = str_to_title(otc),
+         otc = as.factor(otc)) %>% 
+  separate(trade_name, into = c("trade_name", "remove"), sep = "_") %>% 
+  separate(effective_date, into = c("year", "month", "date")) %>%
+  select(-c(date, x1, remove)) %>%
+  mutate(trade_name = trimws(trade_name, which = c("both"))) %>% 
+  separate(trade_name, into = c("trade_name", "remove"), sep = " ") %>% 
+  filter(is.na(remove)) %>%
+  select(-remove) %>% 
+  filter(pricing_unit == "GM" | pricing_unit == "EA") %>% 
+  select(trade_name, everything()) 
+
 trade_name_choice = "Zoloft"
-final_dataset %>%
+drug_price %>%
   filter(trade_name == trade_name_choice) %>%
-  ggplot(aes(x = year, y = avg_price, fill = year)) + 
+  ggplot(aes(x = year, y = unit_price, fill = year)) + 
   geom_violin() + xlim('2013', '2014', '2015', '2016', '2017') + 
   ggtitle(paste0("Distribution of Prices (USD) for ", trade_name_choice), subtitle = NULL)
 ```
